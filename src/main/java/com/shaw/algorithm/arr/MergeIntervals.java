@@ -14,7 +14,7 @@ import java.util.Comparator;
 
 public class MergeIntervals {
     public static void main(String[] args) {
-        int[][] intervals = {{1, 5}, {2, 4}, {5, 10}, {8, 12}, {15, 19}};
+        int[][] intervals = {{9, 11}, {7, 10}, {2, 4}, {2, 5}, {6, 7}};
         System.out.println(Arrays.deepToString(merge(intervals)));
     }
 
@@ -26,7 +26,6 @@ public class MergeIntervals {
      */
     public static int[][] merge(int[][] intervals) {
         Arrays.parallelSort(intervals, Comparator.comparingInt(o -> o[0]));
-
         ArrayList<int[]> res = new ArrayList<>();
         // 合并后的结果
         int[] temp = intervals[0];
@@ -36,6 +35,7 @@ public class MergeIntervals {
             int nStart = intervals[i][0];
             int nEnd = intervals[i][1];
             // 合并
+            // 排序后start <= nStart
             if (start == nStart) {
                 // 相同，返回范围大的
                 temp = end >= nEnd ? temp : intervals[i];
@@ -47,9 +47,8 @@ public class MergeIntervals {
                 // 包含再上个区间中，比较结束区间的大小
                 temp[1] = Math.max(end, nEnd);
             }
-
         }
-
+        // 无法再合并，将最终的temp缓存
         res.add(temp);
         return res.toArray(new int[0][0]);
     }
